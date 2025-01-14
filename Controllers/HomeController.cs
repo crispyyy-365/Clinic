@@ -18,9 +18,18 @@ namespace Clinic.Controllers
             {
                 PatientComments = await _context.PatientComments
                 .OrderBy(pc => pc.Order)
+                .Where(pc => pc.IsDeleted != false)
                 .ToListAsync(),
+
+                Employees = await _context.Employees
+                .OrderBy(e => e.ExperienceYear)
+                .Where(e => e.IsDeleted != false)
+                .Take(4)
+                //.Include(e => e.EmployeePhoto)
+                .Include(e => e.Department)
+                .ToListAsync()
             };
-            _context.SaveChanges();
+            //_context.SaveChanges();
             return View(homeVm);
         }
     }
